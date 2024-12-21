@@ -1,0 +1,1 @@
+//2024 jun (razlika je sto se dimenzije i elementi ucitavaju iz standardnog ulaza a ne iz fajla)
