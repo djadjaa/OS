@@ -1,0 +1,88 @@
+#include <sys/types.h> //sistemski tipovi
+#include <sys/stat.h> //informacije o fajlu
+#include <unistd.h> //spisak cesto koriscenih fja za pristup POSIX sistemskih poziva
+#include <fcntl.h> //file control
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <stdbool.h>
+#include <errno.h>
+
+#define checkError(expr,userMsg) \
+    do{ \
+        if(!(expr)){ \
+            perror(userMsg); \
+            exit(EXIT_FAILURE); \
+        }\
+    }while(0); \
+
+#define osPthreadCheck(err,usrMsg) \
+    do{ \
+        int pthreadErr = err;\
+        if(pthreadErr>0){\
+            errno = pthreadErr;\
+            checkError(false,usrMsg);\
+        }\
+    }while(0);
+
+int n;
+int **mat;
+pthread_mutex_t mutex=PTHREAD_MUTEX_INITIALIZER;
+int brcvorova=0;
+int max = 0;
+
+typedef struct{
+    int num_threads;
+}ThreadArgs;
+
+void *processThread(void *args){
+    ThreadArgs* input = (ThreadArgs*)args;
+    int stepen=0;
+    for(int i=0; i<n; i++)
+        stepen += mat[i][input->num_threads];
+    
+    osPthreadCheck(pthread_mutex_lock(&mutex),"");
+
+    if(stepen>max){
+        max = stepen;
+        brcvorova = input->num_threads;
+    }
+
+    osPthreadCheck(pthread_mutex_unlock(&mutex),"");
+
+    return NULL;
+}
+
+int main(int argc, char **argv){
+    scanf("%d",&n);
+    mat = (int**)malloc(n*sizeof(int*));
+    checkError(mat!=NULL,"");
+    for(int i=0; i<n; i++){
+        mat[i] = (int*)malloc(n*sizeof(int));
+        checkError(mat[i]!=NULL,"");
+    }
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            scanf("%d",&mat[i][j]);
+        }
+    }
+    pthread_t *tids=malloc(n*sizeof(pthread_t));
+    checkError(tids!=NULL,"Malloc");
+    ThreadArgs *data=malloc(n*sizeof(ThreadArgs));
+    checkError(data!=NULL,"");
+    for(int i=0; i<n; i++){
+        data[i].num_threads = i;
+        osPthreadCheck(pthread_create(&tids[i],NULL,processThread,&data[i]),"");
+    }
+    for(int i=0; i<n; i++)
+        osPthreadCheck(pthread_join(tids[i],NULL),"");
+
+    printf("%d",brcvorova);
+    free(tids);
+    free(data);
+    for(int i=0; i<n; i++)
+        free(mat[i]);
+    free(mat);
+    
+    exit(EXIT_SUCCESS);
+}

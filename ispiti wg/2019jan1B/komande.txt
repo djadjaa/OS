@@ -1,0 +1,4 @@
+ls -l
+tail fajl.txt
+stat ... <- komanda stat je neuspesna
+head 1.txt <- komanda head je neuspesna
