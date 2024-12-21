@@ -1,0 +1,3 @@
+- u zadacima gde se rade niti trebalo bi samo da se izmeni tip podataka iz float u double i da se negde doda funkcija pthread_mutex_destroy
+
+- nisu radjeni poll/epoll zadaci posto se vise ne rade

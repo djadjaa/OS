@@ -1,0 +1,5 @@
+- dvosmerna komunikacija izmedju procesa
+- obilazak direktorijuma
+- zakljucavanje fajlova
+- vremena
+- offseti
