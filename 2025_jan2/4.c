@@ -29,10 +29,10 @@ void signalHandler (int signum){
 
 int main(int argc, char **argv){
     printf("%d\n",getpid());
-    checkError(signal(SIGUSR1,signalHandler)!=SIG_ERR,"");
-    checkError(signal(SIGQUIT,signalHandler)!=SIG_ERR,"");
     char *path;
     do{
+        checkError(signal(SIGUSR1,signalHandler)!=SIG_ERR,"");
+        checkError(signal(SIGQUIT,signalHandler)!=SIG_ERR,"");
         pause();
         scanf("%ms",&path);
 
