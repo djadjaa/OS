@@ -1,0 +1,1 @@
+#### rec_test i primer_test su zakljucane, dok 1_test i 2_test nisu. rec_Test i recTest se ne racunaju.
