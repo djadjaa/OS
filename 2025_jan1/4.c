@@ -46,6 +46,7 @@ int main(int argc, char **argv){
             printf("%ld ",fInfo.st_size);
             usr1=0;
         }
+        free(path);
     }while(!stop);
     putchar('\n');
     exit(EXIT_SUCCESS);
